@@ -4,7 +4,6 @@
         <TargetFramework>net7.0</TargetFramework>
         <Description>This QR Code library supports decoding a QR Code image using ImageSharp</Description>
         <RootNamespace>QRCodeDecoderLibrary</RootNamespace>
-        <LangVersion>9</LangVersion>
         <PackageId>QRCodeDecoder-ImageSharp</PackageId>
         <PackageReadmeFile>QRCodeDecoder.PackageReadme.md</PackageReadmeFile>
         <PackageLicenseUrl>https://www.codeproject.com/info/cpol10.aspx</PackageLicenseUrl>
