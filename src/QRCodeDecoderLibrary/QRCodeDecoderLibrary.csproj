@@ -6,7 +6,7 @@
         <RootNamespace>QRCodeDecoderLibrary</RootNamespace>
         <PackageId>QRCodeDecoder-ImageSharp</PackageId>
         <PackageReadmeFile>QRCodeDecoder.PackageReadme.md</PackageReadmeFile>
-        <PackageLicenseUrl>https://www.codeproject.com/info/cpol10.aspx</PackageLicenseUrl>
+        <PackageLicense>https://www.codeproject.com/info/cpol10.aspx</PackageLicense>
         <UserSecretsId>2c11cc4d-9f6a-45ac-aab3-bbcab3318c04</UserSecretsId>
         <Authors>Deepak Sharma,Uzi Granot;Stef Heyenrath</Authors>
         <Product>QRCodeDecoderLibrary</Product>
