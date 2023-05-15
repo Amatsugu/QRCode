@@ -1,12 +1,14 @@
+using Microsoft.Extensions.Logging;
+
+using QRCodeSharedLibrary;
+
+using SixLabors.ImageSharp.Processing;
+
+using Stef.Validation;
+
 using System;
 using System.Collections.Generic;
-using System.Drawing;
-using System.Runtime.InteropServices;
 using System.Text;
-using Microsoft.Extensions.Logging;
-using QRCodeSharedLibrary;
-using Stef.Validation;
-using SixLabors.ImageSharp.Processing;
 
 namespace QRCodeDecoderLibrary
 {
@@ -69,6 +71,7 @@ namespace QRCodeDecoderLibrary
 
         // transformation cooefficients from QR modules to image pixels
         internal double Trans3a;
+
         internal double Trans3b;
         internal double Trans3c;
         internal double Trans3d;
@@ -77,6 +80,7 @@ namespace QRCodeDecoderLibrary
 
         // transformation matrix based on three finders plus one more point
         internal double Trans4a;
+
         internal double Trans4b;
         internal double Trans4c;
         internal double Trans4d;
@@ -220,7 +224,7 @@ namespace QRCodeDecoderLibrary
                             if (DecodeQRCodeCorner(corner)) continue;
 
                             // qr code version 1 has no alignment mark
-                            // in other words decode failed 
+                            // in other words decode failed
                             if (QRCodeVersion == 1) continue;
 
                             // find bottom right alignment mark
@@ -263,7 +267,6 @@ namespace QRCodeDecoderLibrary
         ////////////////////////////////////////////////////////////////////
         internal bool ConvertImageToBlackAndWhite(SixLabors.ImageSharp.Image<SixLabors.ImageSharp.PixelFormats.Rgb24> InputImage)
         {
-
             InputImage.Mutate(i => i.BlackWhite());
 
             BlackWhiteImage = new bool[ImageHeight, ImageWidth];
@@ -274,12 +277,10 @@ namespace QRCodeDecoderLibrary
                     var span = px.GetRowSpan(Row);
                     for (int Col = 0; Col < ImageWidth; Col++)
                     {
-
                         BlackWhiteImage[Row, Col] = span[Col].R == 0;
                     }
                 });
             }
-
 
             return true;
         }
@@ -586,7 +587,6 @@ namespace QRCodeDecoderLibrary
             // list is now empty or has less than three finders
             if (FinderList.Count < 3)
             {
-
                 _logger?.LogDebug("Remove unmatched finders. Less than 3 finders found");
 
                 return false;
@@ -613,7 +613,6 @@ namespace QRCodeDecoderLibrary
             // list is now empty or has less than three finders
             if (FinderList.Count < 3)
             {
-
                 _logger?.LogDebug("Keep best matched finders. Less than 3 finders found");
 
                 return false;
@@ -661,7 +660,6 @@ namespace QRCodeDecoderLibrary
 
             if (AlignList.Count == 0)
                 _logger?.LogDebug("Remove unused alignment marks.\r\nNo alignment marks found");
-
 
             // exit
             return AlignList.Count != 0;
@@ -744,9 +742,7 @@ namespace QRCodeDecoderLibrary
                 // qr code dimension
                 QRCodeDimension = 17 + 4 * QRCodeVersion;
 
-
                 _logger?.LogDebug("Initial version number: {0}, dimension: {1}", QRCodeVersion, QRCodeDimension);
-
 
                 // set transformation matrix
                 SetTransMatrix(corner);
@@ -770,9 +766,7 @@ namespace QRCodeDecoderLibrary
                         // qr code dimension
                         QRCodeDimension = 17 + 4 * QRCodeVersion;
 
-
                         _logger?.LogDebug("Updated version number: {0}, dimension: {1}", QRCodeVersion, QRCodeDimension);
-
 
                         // set transformation matrix
                         SetTransMatrix(corner);
@@ -815,7 +809,7 @@ namespace QRCodeDecoderLibrary
                 ConvertImageToMatrix();
 
                 // based on version and format information
-                // set number of data and error correction codewords length  
+                // set number of data and error correction codewords length
                 SetDataCodewordsLength();
 
                 // apply mask as per get format information step
@@ -1167,7 +1161,6 @@ namespace QRCodeDecoderLibrary
             // test for exact match
             if (Code >= 7 && Code <= 40 && VersionCodeArray[Code - 7] == VersionCode)
             {
-
                 _logger?.LogDebug("Version code exact match: {0:X4}, Version: {1}", VersionCode, Code);
 
                 return Code;
@@ -1193,13 +1186,11 @@ namespace QRCodeDecoderLibrary
                 }
             }
 
-
             if (Error <= 3)
                 _logger?.LogDebug("Version code match with errors: {0:X4}, Version: {1}, Errors: {2}",
                     VersionCode, BestInfo + 7, Error);
             else
                 _logger?.LogDebug("Version code no match: {0:X4}", VersionCode);
-
 
             return Error <= 3 ? BestInfo + 7 : 0;
         }
@@ -1251,7 +1242,6 @@ namespace QRCodeDecoderLibrary
             // test for exact match
             if (FormatInfoArray[Info] == FormatInfo)
             {
-
                 _logger?.LogDebug("Format info exact match: {0:X4}, EC: {1}, mask: {2}",
                     FormatInfo, FormatInfoToErrCode(Info >> 3).ToString(), Info & 7);
 
@@ -1271,13 +1261,11 @@ namespace QRCodeDecoderLibrary
                 }
             }
 
-
             if (Error <= 3)
                 _logger?.LogDebug("Format info match with errors: {0:X4}, EC: {1}, mask: {2}, errors: {3}",
                     FormatInfo, FormatInfoToErrCode(Info >> 3).ToString(), Info & 7, Error);
             else
                 _logger?.LogDebug("Format info no match: {0:X4}", FormatInfo);
-
 
             return Error <= 3 ? BestInfo : -1;
         }
@@ -1307,7 +1295,7 @@ namespace QRCodeDecoderLibrary
             int ErrorCount = 0;
             for (int Row = 0; Row < QRCodeDimension; Row++) for (int Col = 0; Col < QRCodeDimension; Col++)
                 {
-                    // the module (Row, Col) is not a fixed module 
+                    // the module (Row, Col) is not a fixed module
                     if ((BaseMatrix[Row, Col] & Fixed) == 0)
                     {
                         if (GetModule(Row, Col)) BaseMatrix[Row, Col] |= Black;
@@ -1323,7 +1311,6 @@ namespace QRCodeDecoderLibrary
                         if ((GetModule(Row, Col) ? Black : White) != (BaseMatrix[Row, Col] & 1)) ErrorCount++;
                     }
                 }
-
 
             if (ErrorCount == 0)
             {
@@ -1559,10 +1546,9 @@ namespace QRCodeDecoderLibrary
                 // update codewords array to next buffer
                 DataCodewordsPtr += DataCodewords;
 
-                // update pointer				
+                // update pointer
                 CodewordsArrayErrCorrPtr += ErrCorrCodewords;
             }
-
 
             if (TotalErrorCount == 0)
             {
@@ -1572,7 +1558,6 @@ namespace QRCodeDecoderLibrary
             {
                 _logger?.LogDebug("Error correction applied to data. Total errors: " + TotalErrorCount.ToString());
             }
-
         }
 
         ////////////////////////////////////////////////////////////////////
@@ -1706,7 +1691,7 @@ namespace QRCodeDecoderLibrary
                         }
                         break;
 
-                    // byte mode					
+                    // byte mode
                     case EncodingMode.Byte:
                         // append the data after mode and character count
                         for (int Index = 0; Index < DataLength; Index++)
