@@ -15,6 +15,10 @@
         <RepositoryUrl>https://github.com/deathrot/QRCode</RepositoryUrl>
         <PackageTags>QRCode, C#, Barcode, Decode, ImageSharp</PackageTags>
         <GeneratePackageOnBuild>true</GeneratePackageOnBuild>
+        <RunAnalyzersDuringLiveAnalysis>False</RunAnalyzersDuringLiveAnalysis>
+        <RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
+        <EnableNETAnalyzers>False</EnableNETAnalyzers>
+        <AnalysisLevel>none</AnalysisLevel>
     </PropertyGroup>
 
     <ItemGroup>

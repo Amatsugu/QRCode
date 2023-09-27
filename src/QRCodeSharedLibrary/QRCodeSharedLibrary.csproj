@@ -4,5 +4,9 @@
         <TargetFramework>net7.0</TargetFramework>
         <PackageId>QRCodeShared</PackageId>
         <PackageLicenseUrl>https://www.codeproject.com/info/cpol10.aspx</PackageLicenseUrl>
+        <EnableNETAnalyzers>False</EnableNETAnalyzers>
+        <AnalysisLevel>none</AnalysisLevel>
+        <RunAnalyzersDuringLiveAnalysis>False</RunAnalyzersDuringLiveAnalysis>
+        <RunAnalyzersDuringBuild>False</RunAnalyzersDuringBuild>
     </PropertyGroup>
 </Project>
